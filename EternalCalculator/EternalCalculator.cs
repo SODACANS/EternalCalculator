@@ -10,13 +10,16 @@ namespace EternalCalculator
         public CardCollection MasterCardCollection;
         public CardCollection CurrentCardCollection;
         public int NumTrials;
-        public int[] PackCounts;
+        Dictionary<SetList, int[]> PackCounts;
 
         public EternalCalculator(int numTrials = 10)
         {
             NumTrials = numTrials;
             MasterCardCollection = new CardCollection();
-            PackCounts = new int[NumTrials];
+            foreach(SetList setList in MasterCardCollection.Sets.Values)
+            {
+                PackCounts[setList] = new int[numTrials];
+            }
         }
 
         public void Initialize()
