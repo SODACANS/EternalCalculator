@@ -15,7 +15,7 @@ namespace EternalCalculator
             Sets = sets.ToDictionary(s => s, s => new SetList(s));
         }
 
-        public string ToString()
+        public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("\n");
@@ -44,6 +44,26 @@ namespace EternalCalculator
             }
             
             return sb.ToString();
+        }
+
+        public CardCollection Clone()
+        {
+            CardCollection clone = new CardCollection();
+            foreach (SetList setList in Sets.Values)
+            {
+                foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
+                {
+                    foreach (Card card in rarityGroup.Cards.Values)
+                    {
+                        clone.Sets[setList.Set].RarityGroups[rarityGroup.Rarity].Cards[card.Name] = card.Clone();
+                    }
+                    foreach (Card card in rarityGroup.PremiumCards.Values)
+                    {
+                        clone.Sets[setList.Set].RarityGroups[rarityGroup.Rarity].PremiumCards[card.Name] = card.Clone();
+                    }
+                }
+            }
+            return clone;
         }
     }
 }
