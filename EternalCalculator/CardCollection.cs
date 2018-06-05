@@ -80,5 +80,51 @@ namespace EternalCalculator
                 }
             }
         }
+
+        public int GetShiftStoneValueOfExcessCards(bool lazy = true)
+        {
+            int total = 0;
+            foreach (SetList setList in Sets.Values)
+            {
+                foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
+                {
+                    if (lazy)
+                    {
+                        int value = 0;
+                        int qty = 0;
+                        foreach (Card card in rarityGroup.Cards.Values)
+                        {
+                            value = card.GetShiftStoneValue();
+                            qty = Math.Max(0, card.Quantity - 4);
+                            total += value * qty;
+                        }
+                        foreach (Card card in rarityGroup.PremiumCards.Values)
+                        {
+                            value = card.GetShiftStoneValue();
+                            qty = Math.Max(0, card.Quantity - 4);
+                            total += value * qty;
+                        }
+                    }
+                    else
+                    {
+                        Card premiumCard;
+                        int totalQty, qtyToDestroy, qtyNormal, qtyPremium;
+                        foreach (Card card in rarityGroup.Cards.Values)
+                        {
+                            premiumCard = rarityGroup.PremiumCards[card.Name];
+                            totalQty = card.Quantity + premiumCard.Quantity;
+                            qtyToDestroy = Math.Max(0, totalQty - 4);
+                            if (qtyToDestroy > 0)
+                            {
+                                qtyNormal = Math.Min(card.Quantity, qtyToDestroy);
+                                qtyPremium = qtyToDestroy - qtyNormal;
+                                total += card.GetShiftStoneValue() * qtyNormal + premiumCard.GetShiftStoneValue() * qtyPremium;
+                            }
+                        }
+                    }
+                }
+            }
+            return total;
+        }
     }
 }
