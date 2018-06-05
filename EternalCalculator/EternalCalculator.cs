@@ -16,6 +16,7 @@ namespace EternalCalculator
         {
             NumTrials = numTrials;
             MasterCardCollection = new CardCollection();
+            PackCounts = new Dictionary<SetList, int[]>();
             foreach(SetList setList in MasterCardCollection.Sets.Values)
             {
                 PackCounts[setList] = new int[numTrials];
