@@ -7,8 +7,8 @@ namespace EternalCalculator
 {
     public class EternalCalculator
     {
-        public CardCollection MasterCardCollection { get; }
-        public CardCollection CurrentCardCollection { get; }
+        public CardCollection MasterCardCollection;
+        public CardCollection CurrentCardCollection;
         public int NumTrials;
         public int[] PackCounts;
 
@@ -21,18 +21,22 @@ namespace EternalCalculator
 
         public void Initialize()
         {
-            foreach (Set set in MasterCardCollection.Sets.Keys)
+            foreach (SetList setList in MasterCardCollection.Sets.Values)
             {
-                foreach (Rarity rarity in MasterCardCollection.Sets[set].RarityGroups.Keys)
+                foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
                 {
-                    MasterCardCollection.Sets[set].RarityGroups[rarity].Initialize();
+                    rarityGroup.Initialize();
                 }
             }
+            this.CurrentCardCollection = MasterCardCollection.Clone();
         }
 
         public void ConductTrials()
         {
-            // TODO
+            for (int i = 0; i < NumTrials; i++)
+            {
+                ConductTrial(i);
+            }
         }
 
         private void ConductTrial(int i)
