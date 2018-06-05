@@ -65,5 +65,20 @@ namespace EternalCalculator
             }
             return clone;
         }
+
+        public void AddPack(Pack pack)
+        {
+            foreach(Card card in pack.cards)
+            {
+                if (card.IsPremium)
+                {
+                    Sets[pack.Set].RarityGroups[card.Rarity].PremiumCards[card.Name].Quantity++;
+                }
+                else
+                {
+                    Sets[pack.Set].RarityGroups[card.Rarity].Cards[card.Name].Quantity++;
+                }
+            }
+        }
     }
 }
