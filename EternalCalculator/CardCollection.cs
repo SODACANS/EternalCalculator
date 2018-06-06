@@ -81,6 +81,7 @@ namespace EternalCalculator
                     Sets[pack.Set].RarityGroups[card.Rarity].Cards[card.Name].Quantity++;
                 }
             }
+            ShiftStoneTotal += Pack.SHIFT_STONE;
         }
 
         public int DestroyExcessCards(bool lazy = true)
@@ -132,6 +133,62 @@ namespace EternalCalculator
             }
             ShiftStoneTotal += total;
             return total;
+        }
+
+        public int CostToCraftRemaingCards(Set set)
+        {
+            int total = 0;
+            SetList setList = Sets[set];
+            foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
+            {
+                foreach (Card card in rarityGroup.Cards.Values)
+                {
+                    Card PremiumCard = rarityGroup.PremiumCards[card.Name];
+                    int qtyOwned = card.Quantity + PremiumCard.Quantity;
+                    int qtyToCraft = Math.Max(0, 4 - qtyOwned);
+                    total += qtyToCraft * card.GetShiftStoneCost();
+                }
+            }
+            return total;
+        }
+
+        public bool CanCraftRemainingCards(Set set)
+        {
+            return CostToCraftRemaingCards(set) < ShiftStoneTotal;
+        }
+
+        public void CraftRemaingCards(Set set)
+        {
+            int total = 0;
+            SetList setList = Sets[set];
+            foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
+            {
+                foreach (Card card in rarityGroup.Cards.Values)
+                {
+                    Card PremiumCard = rarityGroup.PremiumCards[card.Name];
+                    int qtyOwned = card.Quantity + PremiumCard.Quantity;
+                    int qtyToCraft = Math.Max(0, 4 - qtyOwned);
+                    total += qtyToCraft * card.GetShiftStoneCost();
+                    card.Quantity += qtyToCraft;
+                }
+            }
+            ShiftStoneTotal -= total;
+        }
+
+        public void Reset()
+        {
+            foreach (SetList setList in Sets.Values)
+            {
+                foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
+                {
+                    foreach (Card card in rarityGroup.Cards.Values)
+                    {
+                        card.Quantity = 0;
+                        rarityGroup.PremiumCards[card.Name].Quantity = 0;
+                    }
+                }
+            }
+            ShiftStoneTotal = 0;
         }
     }
 }
