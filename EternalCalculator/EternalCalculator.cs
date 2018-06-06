@@ -70,12 +70,12 @@ namespace EternalCalculator
 
         public void AnalyzeResults()
         {
-            double[] confLevels = { 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99 };
+            double[] quantiles = { 0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99 };
             foreach(Set set in PackCounts.Keys)
             {
                 Console.WriteLine(Enum.GetName(typeof(Set), set));
                 Console.WriteLine(@"    Quantile    Num Packs   Cost");
-                foreach (double p in confLevels)
+                foreach (double p in quantiles)
                 {
                     IEnumerable<double> data = PackCounts[set].Select(i => (double)i);
                     double numPacks = Statistics.Quantile(data, p);
