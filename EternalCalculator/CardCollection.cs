@@ -7,10 +7,12 @@ namespace EternalCalculator
 {
     public class CardCollection
     {
+        public int ShiftStoneTotal;
         public Dictionary<Set, SetList> Sets;
 
         public CardCollection()
         {
+            ShiftStoneTotal = 0;
             Set[] sets = (Set[])Enum.GetValues(typeof(Set));
             Sets = sets.ToDictionary(s => s, s => new SetList(s));
         }
@@ -81,7 +83,7 @@ namespace EternalCalculator
             }
         }
 
-        public int GetShiftStoneValueOfExcessCards(bool lazy = true)
+        public int DestroyExcessCards(bool lazy = true)
         {
             int total = 0;
             foreach (SetList setList in Sets.Values)
@@ -91,18 +93,20 @@ namespace EternalCalculator
                     if (lazy)
                     {
                         int value = 0;
-                        int qty = 0;
+                        int qtyToDestroy = 0;
                         foreach (Card card in rarityGroup.Cards.Values)
                         {
                             value = card.GetShiftStoneValue();
-                            qty = Math.Max(0, card.Quantity - 4);
-                            total += value * qty;
+                            qtyToDestroy = Math.Max(0, card.Quantity - 4);
+                            total += value * qtyToDestroy;
+                            card.Quantity -= qtyToDestroy;
                         }
                         foreach (Card card in rarityGroup.PremiumCards.Values)
                         {
                             value = card.GetShiftStoneValue();
-                            qty = Math.Max(0, card.Quantity - 4);
-                            total += value * qty;
+                            qtyToDestroy = Math.Max(0, card.Quantity - 4);
+                            total += value * qtyToDestroy;
+                            card.Quantity -= qtyToDestroy;
                         }
                     }
                     else
@@ -119,11 +123,14 @@ namespace EternalCalculator
                                 qtyNormal = Math.Min(card.Quantity, qtyToDestroy);
                                 qtyPremium = qtyToDestroy - qtyNormal;
                                 total += card.GetShiftStoneValue() * qtyNormal + premiumCard.GetShiftStoneValue() * qtyPremium;
+                                card.Quantity -= qtyNormal;
+                                premiumCard.Quantity -= qtyPremium;
                             }
                         }
                     }
                 }
             }
+            ShiftStoneTotal += total;
             return total;
         }
     }
