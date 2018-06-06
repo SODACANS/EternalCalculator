@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MathNet.Numerics.Statistics;
+using MathNet.Numerics.Distributions;
 
 namespace EternalCalculator
 {
@@ -10,16 +12,16 @@ namespace EternalCalculator
         public CardCollection MasterCardCollection;
         public CardCollection CurrentCardCollection;
         public int NumTrials;
-        Dictionary<SetList, int[]> PackCounts;
+        Dictionary<Set, int[]> PackCounts;
 
         public EternalCalculator(int numTrials = 10)
         {
             NumTrials = numTrials;
             MasterCardCollection = new CardCollection();
-            PackCounts = new Dictionary<SetList, int[]>();
-            foreach(SetList setList in MasterCardCollection.Sets.Values)
+            PackCounts = new Dictionary<Set, int[]>();
+            foreach(Set set in MasterCardCollection.Sets.Keys)
             {
-                PackCounts[setList] = new int[numTrials];
+                PackCounts[set] = new int[numTrials];
             }
         }
 
@@ -35,22 +37,53 @@ namespace EternalCalculator
             this.CurrentCardCollection = MasterCardCollection.Clone();
         }
 
-        public void ConductTrials()
+        public void ConductTrials(bool lazy = true, bool clearShiftStone = true)
         {
             for (int i = 0; i < NumTrials; i++)
             {
-                ConductTrial(i);
+                Console.WriteLine(@"Working on trial {0}...", i);
+                ConductTrial(i, clearShiftStone);
+                CurrentCardCollection.Reset();
             }
         }
 
-        private void ConductTrial(int i)
+        private void ConductTrial(int i, bool lazy = true, bool clearShiftStone = true)
         {
-            // TODO
+            PackFactory packer = new PackFactory(MasterCardCollection);
+            Pack pack;
+            foreach (Set set in CurrentCardCollection.Sets.Keys)
+            {
+                while (!CurrentCardCollection.CanCraftRemainingCards(set))
+                {
+                    pack = packer.FillPack(set);
+                    PackCounts[set][i]++;
+                    CurrentCardCollection.AddPack(pack);
+                    CurrentCardCollection.DestroyExcessCards(lazy);
+                }
+                CurrentCardCollection.CraftRemaingCards(set);
+                if (clearShiftStone)
+                {
+                    CurrentCardCollection.ShiftStoneTotal = 0;
+                }
+            }
         }
 
         public void AnalyzeResults()
         {
-            // TODO
+            double[] confLevels = { 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99 };
+            foreach(Set set in PackCounts.Keys)
+            {
+                Console.WriteLine(Enum.GetName(typeof(Set), set));
+                Console.WriteLine(@"    Quantile    Num Packs   Cost");
+                foreach (double p in confLevels)
+                {
+                    IEnumerable<double> data = PackCounts[set].Select(i => (double)i);
+                    double numPacks = Statistics.Quantile(data, p);
+                    double cost = numPacks * Pack.GEMS_PER_PACK / Pack.GEMS_PER_DOLLAR;
+                    Console.WriteLine(@"    {0}     {1}     {2}", p, numPacks, cost);
+                }
+            }
+            
         }
 
         static int Main(string[] args)
