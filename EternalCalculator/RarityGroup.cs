@@ -28,8 +28,8 @@ namespace EternalCalculator
 
         public void Initialize()
         {
-            string setName = Enum.GetName(typeof(Set), Set);
-            string rarityName = Enum.GetName(typeof(Rarity), Rarity);
+            string setName = Set.ToString();
+            string rarityName = Rarity.ToString();
             string path = Path.Combine(basePathToMasterCardLists, setName, rarityName + ".txt");
             try
             {

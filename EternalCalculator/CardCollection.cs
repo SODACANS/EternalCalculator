@@ -28,12 +28,12 @@ namespace EternalCalculator
             Card card, premiumCard;
             foreach(Set set in Sets.Keys)
             {
-                setName = Enum.GetName(typeof(Set), set);
+                setName = set.ToString();
                 setList = Sets[set];
                 sb.Append("\t" + setName + "\n");
                 foreach(Rarity rarity in setList.RarityGroups.Keys)
                 {
-                    rarityName = Enum.GetName(typeof(Rarity), rarity);
+                    rarityName = rarity.ToString();
                     rarityGroup = setList.RarityGroups[rarity];
                     sb.Append("\t\t" + rarityName + "\n");
                     foreach(string cardName in rarityGroup.Cards.Keys)
