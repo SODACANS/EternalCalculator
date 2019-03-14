@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using MathNet.Numerics.Statistics;
-using MathNet.Numerics.Distributions;
 
 namespace EternalCalculator
 {

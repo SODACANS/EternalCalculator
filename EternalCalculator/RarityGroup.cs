@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EternalCalculator.Properties;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -10,8 +11,6 @@ namespace EternalCalculator
 
     public class RarityGroup
     {
-        public const string basePathToMasterCardLists = @"D:\Developement\Projects\EternalCalculator\EternalCalculator\MasterCardLists";
-
         public Set Set;
         public Rarity Rarity;
         /// <summary>
@@ -28,26 +27,20 @@ namespace EternalCalculator
 
         public void Initialize()
         {
-            string setName = Set.ToString();
-            string rarityName = Rarity.ToString();
-            string path = Path.Combine(basePathToMasterCardLists, setName, rarityName + ".txt");
-            try
+            // Get the card list for this group from the coresponding resource file.
+            string resourceName = $"{Set}_{Rarity}";
+            var cardList = Resources.ResourceManager.GetString(resourceName);
+            var lines = cardList.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+
+            // Parse the lines into our data structure.
+            foreach(string line in lines)
             {
-                string[] lines = File.ReadAllLines(path);
-                foreach(string line in lines)
-                {
-                    string cardName = ParseCardNameFromLine(line);
-                    Card card = new Card(cardName, Set, Rarity);
-                    Cards[cardName] = card;
-                    Card premiumCard = card.Clone();
-                    premiumCard.IsPremium = true;
-                    PremiumCards[cardName] = premiumCard;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Failed to read cards from file {0}", path);
-                Console.WriteLine("Reason: {0}", ex.Message);
+                string cardName = ParseCardNameFromLine(line);
+                Card card = new Card(cardName, Set, Rarity);
+                Cards[cardName] = card;
+                Card premiumCard = card.Clone();
+                premiumCard.IsPremium = true;
+                PremiumCards[cardName] = premiumCard;
             }
         }
 
