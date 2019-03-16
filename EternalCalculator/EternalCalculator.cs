@@ -83,6 +83,8 @@ namespace EternalCalculator
             
         }
 
+        // TODO: Use McMaster.Extensions.CommanlineUtils package (name might not be quite right) to set up
+        // better command line parsing.
         static int Main(string[] args)
         {
             EternalCalculator calc;
