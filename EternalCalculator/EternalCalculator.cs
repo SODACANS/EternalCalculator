@@ -45,6 +45,7 @@ namespace EternalCalculator
             }
         }
 
+        // TODO: Move the experiment logic into its own class?
         private void ConductTrial(int i, bool lazy = true, bool clearShiftStone = true)
         {
             var packer = new PackFactory(MasterCardCollection);
@@ -65,8 +66,11 @@ namespace EternalCalculator
             }
         }
 
+        // TODO: Create separate class for analysing results.
         public void AnalyzeResults()
         {
+            // TODO: Format the table output better.
+            // See alignment value in: https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/interpolated 
             double[] quantiles = { 0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99 };
             foreach(Set set in PackCounts.Keys)
             {
