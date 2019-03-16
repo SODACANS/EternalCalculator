@@ -17,7 +17,7 @@ namespace EternalCalculator
             NumTrials = numTrials;
             MasterCardCollection = new CardCollection();
             PackCounts = new Dictionary<Set, int[]>();
-            foreach(Set set in MasterCardCollection.Sets.Keys)
+            foreach(Set set in Enum.GetValues(typeof(Set)))
             {
                 PackCounts[set] = new int[numTrials];
             }
@@ -25,14 +25,14 @@ namespace EternalCalculator
 
         public void Initialize()
         {
-            foreach (SetList setList in MasterCardCollection.Sets.Values)
-            {
-                foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
-                {
-                    rarityGroup.Initialize();
-                }
-            }
-            this.CurrentCardCollection = MasterCardCollection.Clone();
+            //foreach (SetList setList in MasterCardCollection.Sets.Values)
+            //{
+            //    foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
+            //    {
+            //        rarityGroup.Initialize();
+            //    }
+            //}
+            //this.CurrentCardCollection = MasterCardCollection.Clone();
         }
 
         public void ConductTrials(bool lazy = true, bool clearShiftStone = true)
@@ -47,21 +47,20 @@ namespace EternalCalculator
 
         private void ConductTrial(int i, bool lazy = true, bool clearShiftStone = true)
         {
-            PackFactory packer = new PackFactory(MasterCardCollection);
-            Pack pack;
-            foreach (Set set in CurrentCardCollection.Sets.Keys)
+            var packer = new PackFactory(MasterCardCollection);
+            foreach (Set set in Enum.GetValues(typeof(Set)))
             {
                 while (!CurrentCardCollection.CanCraftRemainingCards(set))
                 {
-                    pack = packer.FillPack(set);
+                    var pack = packer.FillPack(set);
                     PackCounts[set][i]++;
                     CurrentCardCollection.AddPack(pack);
                     CurrentCardCollection.DestroyExcessCards(lazy);
                 }
-                CurrentCardCollection.CraftRemaingCards(set);
+                CurrentCardCollection.CraftRemainingCardsIfPossible(set);
                 if (clearShiftStone)
                 {
-                    CurrentCardCollection.ShiftStoneTotal = 0;
+                    CurrentCardCollection.ResetShiftStoneTotal();
                 }
             }
         }

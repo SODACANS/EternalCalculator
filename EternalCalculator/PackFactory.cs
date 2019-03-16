@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace EternalCalculator
 {
@@ -24,66 +22,46 @@ namespace EternalCalculator
         {
             Pack pack = new Pack(set);
             Random random = new Random();
+            var cardsInSet = MasterCardCollection.Where(c => c.Set == set && !c.IsPremium);
 
             // stick in 8 commons
-            SetList setList = MasterCardCollection.Sets[set];
-            Rarity rarity = Rarity.Common;
-            RarityGroup rarityGroup = setList.RarityGroups[rarity];
-            Card[] cardList = rarityGroup.Cards.Select(kvp => kvp.Value).ToArray();
-            int cardPoolSize = cardList.Length;
-            Card newCard;
-            int index;
+            var cardList = cardsInSet.Where(c => c.Rarity == Rarity.Common).ToList();
+            int cardPoolSize = cardList.Count;
             for (int i = 0; i < NUM_COMMONS; i++)
             {
-                index = random.Next(cardPoolSize);
-                newCard = cardList[index].Clone();
-                pack.cards.Add(newCard);
+                var index = random.Next(cardPoolSize);
+                pack.cards.Add(cardList[index]);
             }
 
             // stick in 3 uncommons
-            rarity = Rarity.Uncommon;
-            rarityGroup = setList.RarityGroups[rarity];
-            cardList = rarityGroup.Cards.Select(kvp => kvp.Value).ToArray();
-            cardPoolSize = cardList.Length;
+            cardList = cardsInSet.Where(c => c.Rarity == Rarity.Uncommon).ToList();
+            cardPoolSize = cardList.Count;
             for (int i = 0; i < NUM_UNCOMMONS; i++)
             {
-                index = random.Next(cardPoolSize);
-                newCard = cardList[index].Clone();
-                pack.cards.Add(newCard);
+                var index = random.Next(cardPoolSize);
+                pack.cards.Add(cardList[index]);
             }
 
             // stick in 1 rare/legendary
             if (random.NextDouble() < LEGENDARY_CHANCE)
             {
                 // The pack contains a legendary
-                rarity = Rarity.Legendary;
-                rarityGroup = setList.RarityGroups[rarity];
-                cardList = rarityGroup.Cards.Select(kvp => kvp.Value).ToArray();
-                cardPoolSize = cardList.Length;
-                index = random.Next(cardPoolSize);
-                newCard = cardList[index].Clone();
-                pack.cards.Add(newCard);
+                cardList = cardsInSet.Where(c => c.Rarity == Rarity.Legendary).ToList();
+                cardPoolSize = cardList.Count;
+                var index = random.Next(cardPoolSize);
+                pack.cards.Add(cardList[index]);
             }
             else
             {
                 // The pack contains a rare
-                rarity = Rarity.Rare;
-                rarityGroup = setList.RarityGroups[rarity];
-                cardList = rarityGroup.Cards.Select(kvp => kvp.Value).ToArray();
-                cardPoolSize = cardList.Length;
-                index = random.Next(cardPoolSize);
-                newCard = cardList[index].Clone();
-                pack.cards.Add(newCard);
+                cardList = cardsInSet.Where(c => c.Rarity == Rarity.Rare).ToList();
+                cardPoolSize = cardList.Count;
+                var index = random.Next(cardPoolSize);
+                pack.cards.Add(cardList[index]);
             }
 
-            // Now loop through each card and role to see if it is a premium card
-            foreach(Card card in pack.cards)
-            {
-                if (random.NextDouble() < PREMIUM_CHANCE)
-                {
-                    card.IsPremium = true;
-                }
-            }
+            // Now roll to see if each card is a premium card.
+            pack.cards = pack.cards.Select(c => random.NextDouble() < PREMIUM_CHANCE ? c.GetTwin() : c).ToList();
 
             return pack;
         }

@@ -1,194 +1,185 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace EternalCalculator
 {
-    public class CardCollection
+
+    public enum Set { EmptyThrone, OmensOfThePast, DuskRoad }
+    public enum Rarity { Common, Uncommon, Rare, Promo, Legendary }
+
+    public class CardCollection : ICollection<Card> 
     {
-        public int ShiftStoneTotal;
-        public Dictionary<Set, SetList> Sets;
+        public int ShiftStoneTotal { get; private set; }
+        /// <summary>
+        /// Counts the total number of cards in the collection. Including duplicates.
+        /// </summary>
+        /// <returns>The total number of all cards in the collection.</returns>
+        public int Count => CardQuantities.Select(cq => cq.Value).Aggregate(0, (count, quantity) => count + quantity);
+        public bool IsReadOnly => false;
+        private Dictionary<Card, int> CardQuantities;
+        // TODO: CardCollection should hold and manage the master collection of cards.
 
-        public CardCollection()
+        public CardCollection(int shiftStoneTotal = 0)
         {
-            ShiftStoneTotal = 0;
-            Set[] sets = (Set[])Enum.GetValues(typeof(Set));
-            Sets = sets.ToDictionary(s => s, s => new SetList(s));
-        }
-
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("\n");
-            string setName;
-            string rarityName;
-            SetList setList;
-            RarityGroup rarityGroup;
-            Card card, premiumCard;
-            foreach(Set set in Sets.Keys)
-            {
-                setName = set.ToString();
-                setList = Sets[set];
-                sb.Append("\t" + setName + "\n");
-                foreach(Rarity rarity in setList.RarityGroups.Keys)
-                {
-                    rarityName = rarity.ToString();
-                    rarityGroup = setList.RarityGroups[rarity];
-                    sb.Append("\t\t" + rarityName + "\n");
-                    foreach(string cardName in rarityGroup.Cards.Keys)
-                    {
-                        card = rarityGroup.Cards[cardName];
-                        premiumCard = rarityGroup.PremiumCards[cardName];
-                        sb.Append("\t\t\t" + card.Name + " " + card.Quantity + " " + premiumCard.Quantity + "\n");
-                    }
-                }
-            }
-            
-            return sb.ToString();
+            ShiftStoneTotal = shiftStoneTotal;
+            CardQuantities = new Dictionary<Card, int>();
         }
 
         public CardCollection Clone()
         {
-            CardCollection clone = new CardCollection();
-            foreach (SetList setList in Sets.Values)
+            CardCollection clone = new CardCollection(ShiftStoneTotal);
+            foreach (var kvp in CardQuantities)
             {
-                foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
-                {
-                    foreach (Card card in rarityGroup.Cards.Values)
-                    {
-                        clone.Sets[setList.Set].RarityGroups[rarityGroup.Rarity].Cards[card.Name] = card.Clone();
-                    }
-                    foreach (Card card in rarityGroup.PremiumCards.Values)
-                    {
-                        clone.Sets[setList.Set].RarityGroups[rarityGroup.Rarity].PremiumCards[card.Name] = card.Clone();
-                    }
-                }
+                clone.CardQuantities[kvp.Key] = kvp.Value;
             }
             return clone;
         }
 
-        public void AddPack(Pack pack)
+        public int DestroyExcessCards(bool lazy = true) // TODO: get rid of lazy bool input.
         {
-            foreach(Card card in pack.cards)
-            {
-                if (card.IsPremium)
-                {
-                    Sets[pack.Set].RarityGroups[card.Rarity].PremiumCards[card.Name].Quantity++;
-                }
-                else
-                {
-                    Sets[pack.Set].RarityGroups[card.Rarity].Cards[card.Name].Quantity++;
-                }
-            }
-            ShiftStoneTotal += Pack.SHIFT_STONE;
-        }
-
-        public int DestroyExcessCards(bool lazy = true)
-        {
+            // TODO: Implement card destruction strageties.
             int total = 0;
-            foreach (SetList setList in Sets.Values)
+            foreach (var card in CardQuantities.Keys)
             {
-                foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
-                {
-                    if (lazy)
-                    {
-                        int value = 0;
-                        int qtyToDestroy = 0;
-                        foreach (Card card in rarityGroup.Cards.Values)
-                        {
-                            value = card.GetShiftStoneValue();
-                            qtyToDestroy = Math.Max(0, card.Quantity - 4);
-                            total += value * qtyToDestroy;
-                            card.Quantity -= qtyToDestroy;
-                        }
-                        foreach (Card card in rarityGroup.PremiumCards.Values)
-                        {
-                            value = card.GetShiftStoneValue();
-                            qtyToDestroy = Math.Max(0, card.Quantity - 4);
-                            total += value * qtyToDestroy;
-                            card.Quantity -= qtyToDestroy;
-                        }
-                    }
-                    else
-                    {
-                        Card premiumCard;
-                        int totalQty, qtyToDestroy, qtyNormal, qtyPremium;
-                        foreach (Card card in rarityGroup.Cards.Values)
-                        {
-                            premiumCard = rarityGroup.PremiumCards[card.Name];
-                            totalQty = card.Quantity + premiumCard.Quantity;
-                            qtyToDestroy = Math.Max(0, totalQty - 4);
-                            if (qtyToDestroy > 0)
-                            {
-                                qtyNormal = Math.Min(card.Quantity, qtyToDestroy);
-                                qtyPremium = qtyToDestroy - qtyNormal;
-                                total += card.GetShiftStoneValue() * qtyNormal + premiumCard.GetShiftStoneValue() * qtyPremium;
-                                card.Quantity -= qtyNormal;
-                                premiumCard.Quantity -= qtyPremium;
-                            }
-                        }
-                    }
-                }
+                // Use a lazy stragegy to destroy cards.
+                // corresponds to using delete duplicates button in the menu UI.
+                var value = card.GetShiftStoneValue();
+                var qtyToDestroy = Math.Max(0, CardQuantities[card] - 4);
+                total += value * qtyToDestroy;
+                CardQuantities[card] -= qtyToDestroy;
             }
             ShiftStoneTotal += total;
             return total;
         }
 
-        public int CostToCraftRemaingCards(Set set)
+        public int CostToCraftRemaingCards(Set? set = null)
         {
-            int total = 0;
-            SetList setList = Sets[set];
-            foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
+            // TODO: Implement crafting stratagy?
+            var total = 0;
+            var cardsInSet = CardQuantities.Keys as IEnumerable<Card>;
+            if (set != null) {
+                cardsInSet = cardsInSet.Where(c => c.Set == set);
+            }
+            foreach (var card in cardsInSet)
             {
-                foreach (Card card in rarityGroup.Cards.Values)
-                {
-                    Card PremiumCard = rarityGroup.PremiumCards[card.Name];
-                    int qtyOwned = card.Quantity + PremiumCard.Quantity;
-                    int qtyToCraft = Math.Max(0, 4 - qtyOwned);
-                    total += qtyToCraft * card.GetShiftStoneCost();
-                }
+                var twin = card.GetTwin();
+                var qtyOwned = CardQuantities[card] + CardQuantities[twin];
+                var qtyToCraft = Math.Max(0, 4 - qtyOwned);
+                var costToCraft = Math.Min(card.GetShiftStoneCost(), card.GetShiftStoneCost());
+                total += qtyToCraft * costToCraft;
             }
             return total;
         }
 
-        public bool CanCraftRemainingCards(Set set)
+        public bool CanCraftRemainingCards(Set? set = null)
         {
             return CostToCraftRemaingCards(set) < ShiftStoneTotal;
         }
 
-        public void CraftRemaingCards(Set set)
+        private void CraftRemaingCards(Set? set = null)
         {
+            // TODO: Implement crafting stratagy?
             int total = 0;
-            SetList setList = Sets[set];
-            foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
+            var cardsInSet = CardQuantities.Keys as IEnumerable<Card>;
+            if (set != null) {
+                cardsInSet = cardsInSet.Where(c => c.Set == set);
+            }
+            foreach (var card in cardsInSet)
             {
-                foreach (Card card in rarityGroup.Cards.Values)
-                {
-                    Card PremiumCard = rarityGroup.PremiumCards[card.Name];
-                    int qtyOwned = card.Quantity + PremiumCard.Quantity;
-                    int qtyToCraft = Math.Max(0, 4 - qtyOwned);
-                    total += qtyToCraft * card.GetShiftStoneCost();
-                    card.Quantity += qtyToCraft;
-                }
+                var twin = card.GetTwin();
+                var qtyOwned = CardQuantities[card] + CardQuantities[twin];
+                var qtyToCraft = Math.Max(0, 4 - qtyOwned);
+                var cheaperCard = card.IsPremium ? twin : card;
+                total += qtyToCraft * cheaperCard.GetShiftStoneCost();
+                CardQuantities[cheaperCard] += qtyToCraft;
             }
             ShiftStoneTotal -= total;
         }
 
-        public void Reset()
+        public bool CraftRemainingCardsIfPossible(Set? set = null)
         {
-            foreach (SetList setList in Sets.Values)
+            if (CanCraftRemainingCards(set))
             {
-                foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
-                {
-                    foreach (Card card in rarityGroup.Cards.Values)
-                    {
-                        card.Quantity = 0;
-                        rarityGroup.PremiumCards[card.Name].Quantity = 0;
-                    }
-                }
+                CraftRemaingCards(set);
+                return true;
             }
+            return false;
+        }
+
+        public void AddPack(Pack pack)
+        {
+            ShiftStoneTotal += Pack.SHIFT_STONE_PER_PACK;
+            foreach (var card in pack.cards)
+            {
+                Add(card);
+            }
+        }
+
+        public void Add(Card card)
+        {
+            // TODO: Add check to ensure card is in the master card list.
+            if (!CardQuantities.ContainsKey(card))
+            {
+                CardQuantities[card] = 0;
+            }
+            CardQuantities[card] += 1;
+        }
+
+        public bool Remove(Card card)
+        {
+            if (!CardQuantities.ContainsKey(card))
+            {
+                return false;
+            }
+            CardQuantities[card] -= 1;
+
+            // Clamp quantity to zero
+            CardQuantities[card] = Math.Max(CardQuantities[card], 0);
+            return true;
+        }
+
+        public void Clear()
+        {
+            CardQuantities.Values.ToList().ForEach(cq => cq = 0);
+        }
+
+        public void ResetShiftStoneTotal()
+        {
             ShiftStoneTotal = 0;
         }
+
+        public void Reset()
+        {
+            Clear();
+            ResetShiftStoneTotal();
+        }
+
+        public bool Contains(Card item)
+        {
+            return CardQuantities.ContainsKey(item) && CardQuantities[item]> 0;
+        }
+
+        /// <summary>
+        /// Copies one instance of each card in the collection to the input array.
+        /// </summary>
+        /// <param name="array">The array the cards in the collection will be copied to.</param>
+        /// <param name="index">The first index of the array to receive a copied value.</param>
+        public void CopyTo(Card[] array, int index = 0)
+        {
+            CardQuantities.Keys.Where(c => CardQuantities[c] > 0).ToList().CopyTo(array, index);
+        }
+
+        public IEnumerator<Card> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
