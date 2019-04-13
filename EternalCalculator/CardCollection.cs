@@ -93,7 +93,7 @@ namespace EternalCalculator
         {
             // TODO: Implement card destruction strageties.
             int total = 0;
-            // Need to list here to avoid modifying collection we are iterating over.
+            // Need ToList() here to avoid modifying collection we are iterating over.
             var cards = CardQuantities.Keys.ToList();
             foreach (var card in cards)
             {
@@ -140,7 +140,7 @@ namespace EternalCalculator
             if (set != null) {
                 cardsInSet = cardsInSet.Where(c => c.Set == set);
             }
-            // Need to list here to avoid modifying collection we are iterating over.
+            // Need ToList() here to avoid modifying collection we are iterating over.
             cardsInSet = cardsInSet.ToList();
             foreach (var card in cardsInSet)
             {
