@@ -22,6 +22,7 @@ namespace EternalCalculator
             }
         }
 
+        // TODO: Parallelize trials
         public void ConductTrials(bool lazy = true, bool clearShiftStone = true)
         {
             for (int i = 0; i < NumTrials; i++)

@@ -25,6 +25,7 @@ namespace EternalCalculator
             return new Card(Name, Set, Rarity, !IsPremium);
         }
 
+        // TODO: Create unit tests.
         // This is a good candidate for unit tests
         // see https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/statements-expressions-operators/how-to-define-value-equality-for-a-type
         // for requirements.
