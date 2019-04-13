@@ -36,7 +36,7 @@ namespace EternalCalculator
             return obj is Card card && Equals(card);
         }
 
-        public  bool Equals(Card card)
+        public bool Equals(Card card)
         {
             return Name == card.Name
                 && Set == card.Set
