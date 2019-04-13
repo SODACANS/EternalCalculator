@@ -19,7 +19,7 @@ namespace EternalCalculator
             {
                 if (_masterCardCollection == null)
                     InitializeMasterCollection();
-                return _masterCardCollection.ToList().AsReadOnly();
+                return _masterCardCollection.CardQuantities.Keys.ToList().AsReadOnly();
             }
         }
 
@@ -93,7 +93,8 @@ namespace EternalCalculator
         {
             // TODO: Implement card destruction strageties.
             int total = 0;
-            foreach (var card in CardQuantities.Keys)
+            var cards = CardQuantities.Keys.ToList();
+            foreach (var card in cards)
             {
                 // Use a lazy stragegy to destroy cards.
                 // corresponds to using delete duplicates button in the menu UI.
@@ -138,6 +139,7 @@ namespace EternalCalculator
             if (set != null) {
                 cardsInSet = cardsInSet.Where(c => c.Set == set);
             }
+            cardsInSet = cardsInSet.ToList();
             foreach (var card in cardsInSet)
             {
                 var twin = card.GetTwin();
@@ -225,13 +227,12 @@ namespace EternalCalculator
 
         public IEnumerator<Card> GetEnumerator()
         {
-            // TODO: Create enumerator
-            throw new NotImplementedException();
+            return CardQuantities.Where(c => c.Value > 0).Select(c => c.Key).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return CardQuantities.Where(c => c.Value > 0).Select(c => c.Key).GetEnumerator();
         }
 
     }
