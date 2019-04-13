@@ -225,6 +225,7 @@ namespace EternalCalculator
 
         public IEnumerator<Card> GetEnumerator()
         {
+            // TODO: Create enumerator
             throw new NotImplementedException();
         }
 
