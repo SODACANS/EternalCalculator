@@ -23,7 +23,7 @@ namespace EternalCalculator
             }
         }
 
-        private static void InitializeMasterCollection()
+        public static void InitializeMasterCollection()
         {
             _masterCardCollection = new CardCollection();
             foreach (Set set in Enum.GetValues(typeof(Set)))
@@ -121,7 +121,7 @@ namespace EternalCalculator
                 var twin = card.GetTwin();
                 var qtyOwned = CardQuantities[card] + CardQuantities[twin];
                 var qtyToCraft = Math.Max(0, 4 - qtyOwned);
-                var costToCraft = Math.Min(card.GetShiftStoneCost(), card.GetShiftStoneCost());
+                var costToCraft = Math.Min(card.GetShiftStoneCost(), twin.GetShiftStoneCost());
                 total += qtyToCraft * costToCraft;
             }
             return total;
@@ -197,7 +197,11 @@ namespace EternalCalculator
 
         public void Clear()
         {
-            CardQuantities.Values.ToList().ForEach(cq => cq = 0);
+            var cards = CardQuantities.Keys.ToList();
+            foreach(var card in cards)
+            {
+                CardQuantities[card] = 0;
+            }
         }
 
         public void ResetShiftStoneTotal()
