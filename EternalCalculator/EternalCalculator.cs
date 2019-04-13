@@ -28,7 +28,7 @@ namespace EternalCalculator
         {
             for (int i = 0; i < NumTrials; i++)
             {
-                Console.WriteLine(@"Working on trial {0}...", i);
+                Console.WriteLine($"Working on trial {i}...");
                 ConductTrial(i);
                 CurrentCardCollection.Reset();
             }
