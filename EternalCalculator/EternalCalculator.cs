@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using MathNet.Numerics.Statistics;
 
 namespace EternalCalculator
 {
     public class EternalCalculator
     {
-        public CardCollection CurrentCardCollection;
         public int NumTrials;
         Dictionary<Set, int[]> PackCounts;
 
         public EternalCalculator(int numTrials = 10)
         {
-            CurrentCardCollection = CardCollection.CreateCardCollection();
             NumTrials = numTrials;
             PackCounts = new Dictionary<Set, int[]>();
             foreach(Set set in Enum.GetValues(typeof(Set)))
@@ -23,31 +22,33 @@ namespace EternalCalculator
             }
         }
 
-        // TODO: Parallelize trials
-        public void ConductTrials()
+        public async Task ConductTrialsAsync()
         {
+            var trials = new Task[NumTrials];
             for (int i = 0; i < NumTrials; i++)
             {
-                Console.WriteLine($"Working on trial {i}...");
-                ConductTrial(i);
-                CurrentCardCollection.Reset();
+                var trial = Task.Factory.StartNew((index) => ConductTrial((int)index), i);
+                trials[i] = trial;
             }
+            await Task.WhenAll(trials);
         }
 
         private void ConductTrial(int i)
         {
+            Console.WriteLine($"Working on trial {i}...");
             var packer = new PackFactory();
+            var cardCollection = CardCollection.CreateCardCollection();
             foreach (Set set in Enum.GetValues(typeof(Set)))
             {
-                while (!CurrentCardCollection.CanCraftRemainingCards(set))
+                while (!cardCollection.CanCraftRemainingCards(set))
                 {
                     var pack = packer.FillPack(set);
                     PackCounts[set][i]++;
-                    CurrentCardCollection.AddPack(pack);
-                    CurrentCardCollection.DestroyExcessCards();
+                    cardCollection.AddPack(pack);
+                    cardCollection.DestroyExcessCards();
                 }
-                CurrentCardCollection.CraftRemainingCardsIfPossible(set);
-                CurrentCardCollection.ResetShiftStoneTotal();
+                cardCollection.CraftRemainingCardsIfPossible(set);
+                cardCollection.ResetShiftStoneTotal();
             }
         }
 
@@ -94,9 +95,10 @@ namespace EternalCalculator
 
         // TODO: Use McMaster.Extensions.CommanlineUtils package (name might not be quite right) to set up
         // better command line parsing.
-        static int Main(string[] args)
+        static async Task<int> Main(string[] args)
         {
             EternalCalculator calc;
+            CardCollection.InitializeMasterCollection();
             if (args.Length < 1)
             {
                 Console.WriteLine("No trial count given. Will conduct test with default trial count of 10.");
@@ -118,7 +120,7 @@ namespace EternalCalculator
             }
 
             Console.WriteLine("Conducting experiment...");
-            calc.ConductTrials();
+            await calc.ConductTrialsAsync();
             Console.WriteLine("Experiment finished.");
 
             Console.WriteLine("Results:");
