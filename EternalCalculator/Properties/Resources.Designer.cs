@@ -19,7 +19,7 @@ namespace EternalCalculator.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -57,6 +57,121 @@ namespace EternalCalculator.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Borrowed Violence (Set5 #149)
+        ///1 Endure (Set5 #75)
+        ///1 Melt Down (Set5 #1)
+        ///1 Steely Resolve (Set5 #112)
+        ///1 Unearth the Past (Set5 #38)
+        ///1 Araktodon Egg (Set5 #41)
+        ///1 Astromancer&apos;s Compass (Set5 #251)
+        ///1 Be Gone (Set5 #39)
+        ///1 Cabal Scavenger (Set5 #150)
+        ///1 Crystal Dirk (Set5 #113)
+        ///1 Mischief Yeti (Set5 #115)
+        ///1 Oni Samurai (Set5 #78)
+        ///1 Research Assistant (Set5 #4)
+        ///1 Scorpion (Set5 #42)
+        ///1 Softfoot Burglar (Set5 #5)
+        ///1 Unmoored Valkyrie (Set5 #80)
+        ///1 Bannerman (Set5 #252)
+        ///1 Barrel Through (Set5 #82)
+        ///1  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Defiance_Common {
+            get {
+                return ResourceManager.GetString("Defiance_Common", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Snowdrift Delver (Set5 #124)
+        ///1 Tavia, Lethrai Raidleader (Set5 #164)
+        ///1 Torgov&apos;s Trading Post (Set5 #203)
+        ///1 Kemmo, Ijin&apos;s Apprentice (Set5 #89)
+        ///1 Nika, the Freescaler (Set5 #17)
+        ///1 Phoenix Stone (Set5 #18)
+        ///1 Bladerang (Set5 #21)
+        ///1 Clutch of Talons (Set5 #133)
+        ///1 Cykalis, the Burning Sand (Set5 #57)
+        ///1 Darya, Warrior Poet (Set5 #186)
+        ///1 Dumping Ground (Set5 #169)
+        ///1 Flamebrewer (Set5 #20)
+        ///1 Governor Sahin (Set5 #171)
+        ///1 Ijin&apos;s Workshop (Set5 #200)
+        ///1 Regent&apos;s Tomb (Set5 #213)
+        ///1 The Praxis Arcanum (S [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Defiance_Legendary {
+            get {
+                return ResourceManager.GetString("Defiance_Legendary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Star-Reader Severin (Set5 #312)
+        ///1 Cursed Prophet Deleph (Set5 #314)
+        ///1 Milos, Unwavering Idealist (Set5 #313)
+        ///1 Justa, Regglar Jotun (Set5 #311).
+        /// </summary>
+        internal static string Defiance_Promo {
+            get {
+                return ResourceManager.GetString("Defiance_Promo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Adjudicator&apos;s Gavel (Set5 #76)
+        ///1 Auralian Cargo (Set5 #232)
+        ///1 Crested Runt (Set5 #40)
+        ///1 Ixtun Cargo (Set5 #227)
+        ///1 Jennev Cargo (Set5 #242)
+        ///1 Kerendon Cargo (Set5 #247)
+        ///1 Savagery (Set5 #117)
+        ///1 Weary Spiteling (Set5 #155)
+        ///1 Winchest Cargo (Set5 #237)
+        ///1 Bazaar Trickster (Set5 #43)
+        ///1 Golem Press (Set5 #85)
+        ///1 Highland Sharpshooter (Set5 #197)
+        ///1 Hojan, Crownbreaker (Set5 #86)
+        ///1 Mournful Deathcap (Set5 #161)
+        ///1 Notorious Scoundrel (Set5 #9)
+        ///1 Stormtamer Operative (Set5 #118)
+        ///1 Vapor Hut (Set5 #50 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Defiance_Rare {
+            get {
+                return ResourceManager.GetString("Defiance_Rare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Bottoms Up (Set5 #2)
+        ///1 Cautious Traveler (Set5 #3)
+        ///1 Defiance (Set5 #77)
+        ///1 Direwood Slasher (Set5 #151)
+        ///1 Frostwave (Set5 #114)
+        ///1 Lethrai Lobotomy (Set5 #152)
+        ///1 Pitfall Trap (Set5 #116)
+        ///1 Rat Cage (Set5 #153)
+        ///1 Secret Passage (Set5 #154)
+        ///1 Svetya&apos;s Bravery (Set5 #79)
+        ///1 Urn of Choking Embers (Set5 #6)
+        ///1 Axe Sharpener (Set5 #81)
+        ///1 Blood Quill (Set5 #156)
+        ///1 Chancellor&apos;s Horn (Set5 #83)
+        ///1 Dissociate (Set5 #44)
+        ///1 Firemane Lioness (Set5 #8)
+        ///1 Heirloom Seeker (Set5 #158)
+        ///1 Locust (Set5 #45)
+        ///1 O [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Defiance_Uncommon {
+            get {
+                return ResourceManager.GetString("Defiance_Uncommon", resourceCulture);
             }
         }
         
@@ -403,6 +518,123 @@ namespace EternalCalculator.Properties {
         internal static string OmensOfThePast_Uncommon {
             get {
                 return ResourceManager.GetString("OmensOfThePast_Uncommon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Drifter (Set4 #2)
+        ///1 Gift of Battle (Set4 #146)
+        ///1 Harbinger&apos;s Bite (Set4 #194)
+        ///1 Jibbering Jackal (Set4 #52)
+        ///1 Journey Guide (Set4 #53)
+        ///1 Light &apos;em Up (Set4 #4)
+        ///1 Lingering Influence (Set4 #100)
+        ///1 Lock Horns (Set4 #207)
+        ///1 Meditation (Set4 #54)
+        ///1 Peacekeeper&apos;s Helm (Set4 #101)
+        ///1 Rambot (Set4 #7)
+        ///1 Sharpened Reflex (Set4 #102)
+        ///1 Shiver (Set4 #148)
+        ///1 Snowrager (Set4 #149)
+        ///1 Spire Spellsword (Set4 #103)
+        ///1 Spitefeeder (Set4 #197)
+        ///1 Training Ground (Set4 #59)
+        ///1 Afterimage (Set4 #212)
+        ///1 Arcane D [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TheFallOfArgenport_Common {
+            get {
+                return ResourceManager.GetString("TheFallOfArgenport_Common", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Time Flies (Set4 #58)
+        ///1 Blackhall Warleader (Set4 #201)
+        ///1 Ironfist Chancellor (Set4 #108)
+        ///1 Lida&apos;s Apprentice (Set4 #158)
+        ///1 Scale Seeker (Set4 #15)
+        ///1 Teacher of Humility (Set4 #67)
+        ///1 Copperhall Bracers (Set4 #115)
+        ///1 Horde Plunderer (Set4 #168)
+        ///1 Void Drummer (Set4 #222)
+        ///1 Wingbrewer (Set4 #223)
+        ///1 Breeze Dancer (Set4 #174)
+        ///1 Dramatist&apos;s Mask (Set4 #31)
+        ///1 Geomar, the Steel Tempest (Set4 #128)
+        ///1 Gnash, Pridemaster (Set4 #79)
+        ///1 Jawbone Greatsword (Set4 #33)
+        ///1 Lethrai Provocateur (Set4 #228)
+        ///1  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TheFallOfArgenport_Legendary {
+            get {
+                return ResourceManager.GetString("TheFallOfArgenport_Legendary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Wyatt, Junk Collector (Set4 #306)
+        ///1 Genetrix Irel IV (Set4 #307)
+        ///1 Yushkov, the Usurper (Set4 #310)
+        ///1 Tamarys, the Geomancer (Set4 #308)
+        ///1 Caiphus, Wandering King (Set4 #309).
+        /// </summary>
+        internal static string TheFallOfArgenport_Promo {
+            get {
+                return ResourceManager.GetString("TheFallOfArgenport_Promo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Alessi, Combrei Archmage (Set4 #248)
+        ///1 Longbarrel (Set4 #5)
+        ///1 Pathlighter (Set4 #55)
+        ///1 Randori (Set4 #56)
+        ///1 Sandstorm Scarf (Set4 #50)
+        ///1 Amaran Armadillo (Set4 #60)
+        ///1 Bar the Gates (Set4 #105)
+        ///1 Barricade (Set4 #106)
+        ///1 Bulletshaper (Set4 #244)
+        ///1 Derry Cathain, Ripclaw Rider (Set4 #251)
+        ///1 Factory Quota (Set4 #17)
+        ///1 Fearbinder (Set4 #203)
+        ///1 Fenris Nightshade (Set4 #204)
+        ///1 Flamebelcher (Set4 #10)
+        ///1 Honored Skyguard (Set4 #155)
+        ///1 Quicktrigger Outlaw (Set4 #13)
+        ///1 Recon Tower (Set4 #275)
+        ///1 Rilg [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TheFallOfArgenport_Rare {
+            get {
+                return ResourceManager.GetString("TheFallOfArgenport_Rare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Harmless Question (Set4 #98)
+        ///1 Entrancer (Set4 #51)
+        ///1 Feed the Flames (Set4 #3)
+        ///1 Feral Spiteling (Set4 #205)
+        ///1 Horrifying Helm (Set4 #195)
+        ///1 Ironfist Faithful (Set4 #99)
+        ///1 Mindfire (Set4 #6)
+        ///1 Savage Denial (Set4 #147)
+        ///1 Sewer Sludge (Set4 #196)
+        ///1 Staff of Speed (Set4 #57)
+        ///1 Substitute (Set4 #150)
+        ///1 Xenan Lifespeaker (Set4 #198)
+        ///1 Abduct (Set4 #199)
+        ///1 Ankle Cutter (Set4 #8)
+        ///1 Campfire Watchman (Set4 #151)
+        ///1 Consuming Flames (Set4 #9)
+        ///1 Cull the Deck (Set4 #202)
+        ///1 Dusk Raider (Set4 #153)        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TheFallOfArgenport_Uncommon {
+            get {
+                return ResourceManager.GetString("TheFallOfArgenport_Uncommon", resourceCulture);
             }
         }
     }

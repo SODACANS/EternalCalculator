@@ -118,6 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Defiance_Common" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MasterCardLists\Defiance_Common.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Defiance_Legendary" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MasterCardLists\Defiance_Legendary.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Defiance_Promo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MasterCardLists\Defiance_Promo.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Defiance_Rare" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MasterCardLists\Defiance_Rare.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Defiance_Uncommon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MasterCardLists\Defiance_Uncommon.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="DuskRoad_Common" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\MasterCardLists\DuskRoad_Common.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
@@ -162,5 +177,20 @@
   </data>
   <data name="OmensOfThePast_Uncommon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\MasterCardLists\OmensOfThePast_Uncommon.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="TheFallOfArgenport_Common" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MasterCardLists\TheFallOfArgenport_Common.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="TheFallOfArgenport_Legendary" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MasterCardLists\TheFallOfArgenport_Legendary.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="TheFallOfArgenport_Promo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MasterCardLists\TheFallOfArgenport_Promo.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="TheFallOfArgenport_Rare" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MasterCardLists\TheFallOfArgenport_Rare.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="TheFallOfArgenport_Uncommon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MasterCardLists\TheFallOfArgenport_Uncommon.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

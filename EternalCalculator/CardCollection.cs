@@ -7,7 +7,7 @@ using System.Linq;
 namespace EternalCalculator
 {
 
-    public enum Set { EmptyThrone, OmensOfThePast, DuskRoad }
+    public enum Set { EmptyThrone, OmensOfThePast, DuskRoad, TheFallOfArgenport, Defiance }
     public enum Rarity { Common, Uncommon, Rare, Promo, Legendary }
 
     public class CardCollection : ICollection<Card>
