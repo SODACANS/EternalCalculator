@@ -23,18 +23,18 @@ namespace EternalCalculator
         }
 
         // TODO: Parallelize trials
-        public void ConductTrials(bool lazy = true, bool clearShiftStone = true)
+        public void ConductTrials()
         {
             for (int i = 0; i < NumTrials; i++)
             {
                 Console.WriteLine(@"Working on trial {0}...", i);
-                ConductTrial(i, clearShiftStone);
+                ConductTrial(i);
                 CurrentCardCollection.Reset();
             }
         }
 
         // TODO: Move the experiment logic into its own class?
-        private void ConductTrial(int i, bool lazy = true, bool clearShiftStone = true)
+        private void ConductTrial(int i)
         {
             var packer = new PackFactory();
             foreach (Set set in Enum.GetValues(typeof(Set)))
@@ -44,13 +44,10 @@ namespace EternalCalculator
                     var pack = packer.FillPack(set);
                     PackCounts[set][i]++;
                     CurrentCardCollection.AddPack(pack);
-                    CurrentCardCollection.DestroyExcessCards(lazy);
+                    CurrentCardCollection.DestroyExcessCards();
                 }
                 CurrentCardCollection.CraftRemainingCardsIfPossible(set);
-                if (clearShiftStone)
-                {
-                    CurrentCardCollection.ResetShiftStoneTotal();
-                }
+                CurrentCardCollection.ResetShiftStoneTotal();
             }
         }
 

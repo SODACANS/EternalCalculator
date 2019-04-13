@@ -89,7 +89,7 @@ namespace EternalCalculator
             return clone;
         }
 
-        public int DestroyExcessCards(bool lazy = true) // TODO: get rid of lazy bool input.
+        public int DestroyExcessCards()
         {
             // TODO: Implement card destruction strageties.
             int total = 0;
