@@ -85,9 +85,9 @@ namespace EternalCalculator
                 stringBuilder.AppendLine();
                 stringBuilder.AppendLine($"{set}:");
                 stringBuilder.AppendLine(string.Format($"{{0,{column1Width}}} {{1,{column2Width}}} {{2,{column3Width}}}", headers));
-                foreach (var datum in results[set])
+                foreach (var (Quantile, NumPacks, Cost) in results[set])
                 {
-                    stringBuilder.AppendLine(string.Format(formatString, datum.Quantile, datum.NumPacks, datum.Cost));
+                    stringBuilder.AppendLine(string.Format(formatString, Quantile, NumPacks, Cost));
                 }
             }
             Console.Write(stringBuilder.ToString());
