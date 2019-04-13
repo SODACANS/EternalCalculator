@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using MathNet.Numerics.Statistics;
 
 namespace EternalCalculator
@@ -33,7 +34,6 @@ namespace EternalCalculator
             }
         }
 
-        // TODO: Move the experiment logic into its own class?
         private void ConductTrial(int i)
         {
             var packer = new PackFactory();
@@ -51,25 +51,45 @@ namespace EternalCalculator
             }
         }
 
-        // TODO: Create separate class for analysing results.
-        public void AnalyzeResults()
+        public Dictionary<Set, List<(double Quantile, double NumPacks, decimal Cost)>> AnalyzeResults()
         {
-            // TODO: Format the table output better.
-            // See alignment value in: https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/interpolated 
             double[] quantiles = { 0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99 };
+            var results = new Dictionary<Set, List<(double, double, decimal)>>();
             foreach(Set set in PackCounts.Keys)
             {
-                Console.WriteLine(set.ToString());
-                Console.WriteLine(@"    Quantile    Num Packs   Cost");
+                var setResults = new List<(double, double, decimal)>();
                 foreach (double p in quantiles)
                 {
                     IEnumerable<double> data = PackCounts[set].Select(i => (double)i);
                     double numPacks = Statistics.Quantile(data, p);
-                    double cost = numPacks * Pack.GEMS_PER_PACK / Pack.GEMS_PER_DOLLAR;
-                    Console.WriteLine(@"    {0}     {1}     {2}", p, numPacks, cost);
+                    decimal cost = (decimal)numPacks * Pack.GEMS_PER_PACK / Pack.GEMS_PER_DOLLAR;
+                    setResults.Add((p, numPacks, cost));
+                }
+                results[set] = setResults;
+            }
+            return results;
+        }
+
+        public void PrintResults(Dictionary<Set, List<(double Quantile, double NumPacks, decimal Cost)>> results)
+        {
+            // See alignment value in: https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/interpolated 
+            string[] headers = { "Quantile", "Number of Packs", "Cost" };
+            const int column1Width = 8;
+            const int column2Width = 16;
+            const int column3Width = 10;
+            string formatString = $"{{0,{column1Width}:N2}} {{1,{column2Width}:N0}} {{2,{column3Width}:C}}";
+            var stringBuilder = new StringBuilder();
+            foreach (Set set in results.Keys)
+            {
+                stringBuilder.AppendLine();
+                stringBuilder.AppendLine($"{set}:");
+                stringBuilder.AppendLine(string.Format($"{{0,{column1Width}}} {{1,{column2Width}}} {{2,{column3Width}}}", headers));
+                foreach (var datum in results[set])
+                {
+                    stringBuilder.AppendLine(string.Format(formatString, datum.Quantile, datum.NumPacks, datum.Cost));
                 }
             }
-            
+            Console.Write(stringBuilder.ToString());
         }
 
         // TODO: Use McMaster.Extensions.CommanlineUtils package (name might not be quite right) to set up
@@ -97,12 +117,13 @@ namespace EternalCalculator
                 }
             }
 
-            Console.WriteLine("Staring experiment...");
+            Console.WriteLine("Conducting experiment...");
             calc.ConductTrials();
             Console.WriteLine("Experiment finished.");
 
             Console.WriteLine("Results:");
-            calc.AnalyzeResults();
+            var results = calc.AnalyzeResults();
+            calc.PrintResults(results);
             Console.WriteLine();
 
             Console.WriteLine("Press any key when finished.");

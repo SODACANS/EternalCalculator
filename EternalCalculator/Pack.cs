@@ -6,8 +6,8 @@ namespace EternalCalculator
     {
         public const int SHIFT_STONE_PER_PACK = 100;
         // TODO: Find a better home for this constant. Maybe a ResultsAnalyzer class?
-        public const double GEMS_PER_DOLLAR = 116.6861143523921;
-        public const double GEMS_PER_PACK = 90.625;
+        public const decimal GEMS_PER_DOLLAR = 116.6861143523921m;
+        public const decimal GEMS_PER_PACK = 90.625m;
         public Set Set { get; }
         public ICollection<Card> cards;
 
