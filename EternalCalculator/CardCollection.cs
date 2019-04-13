@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EternalCalculator.Properties;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,61 @@ namespace EternalCalculator
     public enum Set { EmptyThrone, OmensOfThePast, DuskRoad }
     public enum Rarity { Common, Uncommon, Rare, Promo, Legendary }
 
-    public class CardCollection : ICollection<Card> 
+    public class CardCollection : ICollection<Card>
     {
+        private static CardCollection _masterCardCollection;
+        public static IReadOnlyCollection<Card> MasterCardCollection
+        {
+            get
+            {
+                if (_masterCardCollection == null)
+                    InitializeMasterCollection();
+                return _masterCardCollection.ToList().AsReadOnly();
+            }
+        }
+
+        private static void InitializeMasterCollection()
+        {
+            _masterCardCollection = new CardCollection();
+            foreach (Set set in Enum.GetValues(typeof(Set)))
+            {
+                foreach (Rarity rarity in Enum.GetValues(typeof(Rarity)))
+                {
+                    //Get the card list for this group from the coresponding resource file.
+                    string resourceName = $"{set}_{rarity}";
+                    var cardList = Resources.ResourceManager.GetString(resourceName);
+                    var lines = cardList.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+
+                    // Parse the lines into our data structure.
+                    foreach (string line in lines)
+                    {
+                        string cardName = ParseCardNameFromLine(line);
+                        Card card = new Card(cardName, set, rarity);
+                        _masterCardCollection.CardQuantities[card] = 0;
+                        Card premiumCard = card.GetTwin();
+                        _masterCardCollection.CardQuantities[premiumCard] = 0;
+                    }
+                }
+            }
+
+            string ParseCardNameFromLine(string line)
+            {
+                int endIndex = line.IndexOf('(') - 1;
+                int startIndex = 2;
+                int length = endIndex - startIndex;
+                return line.Substring(startIndex, length);
+            }
+        }
+        public static CardCollection CreateCardCollection(int shiftStoneTotal = 0)
+        {
+            if (_masterCardCollection == null)
+                InitializeMasterCollection();
+            var collection = _masterCardCollection.Clone();
+            collection.ShiftStoneTotal = shiftStoneTotal;
+            return collection;
+        }
+
+        private Dictionary<Card, int> CardQuantities;
         public int ShiftStoneTotal { get; private set; }
         /// <summary>
         /// Counts the total number of cards in the collection. Including duplicates.
@@ -18,10 +72,8 @@ namespace EternalCalculator
         /// <returns>The total number of all cards in the collection.</returns>
         public int Count => CardQuantities.Select(cq => cq.Value).Aggregate(0, (count, quantity) => count + quantity);
         public bool IsReadOnly => false;
-        private Dictionary<Card, int> CardQuantities;
-        // TODO: CardCollection should hold and manage the master collection of cards.
 
-        public CardCollection(int shiftStoneTotal = 0)
+        private CardCollection(int shiftStoneTotal = 0)
         {
             ShiftStoneTotal = shiftStoneTotal;
             CardQuantities = new Dictionary<Card, int>();

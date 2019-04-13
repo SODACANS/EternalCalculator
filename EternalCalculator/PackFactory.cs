@@ -11,18 +11,11 @@ namespace EternalCalculator
         public const int NUM_UNCOMMONS = 3;
         public const int NUM_RARE_LEGENDARY = 1;
 
-        private CardCollection MasterCardCollection;
-
-        public PackFactory(CardCollection masterCardCollection)
-        {
-            MasterCardCollection = masterCardCollection;
-        }
-
         public Pack FillPack(Set set)
         {
             Pack pack = new Pack(set);
             Random random = new Random();
-            var cardsInSet = MasterCardCollection.Where(c => c.Set == set && !c.IsPremium);
+            var cardsInSet = CardCollection.MasterCardCollection.Where(c => c.Set == set && !c.IsPremium);
 
             // stick in 8 commons
             var cardList = cardsInSet.Where(c => c.Rarity == Rarity.Common).ToList();

@@ -7,32 +7,19 @@ namespace EternalCalculator
 {
     public class EternalCalculator
     {
-        public CardCollection MasterCardCollection;
         public CardCollection CurrentCardCollection;
         public int NumTrials;
         Dictionary<Set, int[]> PackCounts;
 
         public EternalCalculator(int numTrials = 10)
         {
+            CurrentCardCollection = CardCollection.CreateCardCollection();
             NumTrials = numTrials;
-            MasterCardCollection = new CardCollection();
             PackCounts = new Dictionary<Set, int[]>();
             foreach(Set set in Enum.GetValues(typeof(Set)))
             {
                 PackCounts[set] = new int[numTrials];
             }
-        }
-
-        public void Initialize()
-        {
-            //foreach (SetList setList in MasterCardCollection.Sets.Values)
-            //{
-            //    foreach (RarityGroup rarityGroup in setList.RarityGroups.Values)
-            //    {
-            //        rarityGroup.Initialize();
-            //    }
-            //}
-            //this.CurrentCardCollection = MasterCardCollection.Clone();
         }
 
         public void ConductTrials(bool lazy = true, bool clearShiftStone = true)
@@ -48,7 +35,7 @@ namespace EternalCalculator
         // TODO: Move the experiment logic into its own class?
         private void ConductTrial(int i, bool lazy = true, bool clearShiftStone = true)
         {
-            var packer = new PackFactory(MasterCardCollection);
+            var packer = new PackFactory();
             foreach (Set set in Enum.GetValues(typeof(Set)))
             {
                 while (!CurrentCardCollection.CanCraftRemainingCards(set))
@@ -111,9 +98,6 @@ namespace EternalCalculator
                     return -1;
                 }
             }
-
-            Console.WriteLine("Initializing master card collection...");
-            calc.Initialize();
 
             Console.WriteLine("Staring experiment...");
             calc.ConductTrials();
