@@ -17,48 +17,50 @@ namespace EternalCalculator
         {
             get
             {
-                if (_masterCardCollection == null)
-                    InitializeMasterCollection();
                 return _masterCardCollection.CardQuantities.Keys.ToList().AsReadOnly();
             }
         }
 
-        public static void InitializeMasterCollection()
+        static CardCollection()
         {
-            _masterCardCollection = new CardCollection();
-            foreach (Set set in Enum.GetValues(typeof(Set)))
-            {
-                foreach (Rarity rarity in Enum.GetValues(typeof(Rarity)))
-                {
-                    //Get the card list for this group from the coresponding resource file.
-                    string resourceName = $"{set}_{rarity}";
-                    var cardList = Resources.ResourceManager.GetString(resourceName);
-                    var lines = cardList.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            InitializeMasterCollection();
 
-                    // Parse the lines into our data structure.
-                    foreach (string line in lines)
+            void InitializeMasterCollection()
+            {
+                _masterCardCollection = new CardCollection();
+                foreach (Set set in Enum.GetValues(typeof(Set)))
+                {
+                    foreach (Rarity rarity in Enum.GetValues(typeof(Rarity)))
                     {
-                        string cardName = ParseCardNameFromLine(line);
-                        Card card = new Card(cardName, set, rarity);
-                        _masterCardCollection.CardQuantities[card] = 0;
-                        Card premiumCard = card.GetTwin();
-                        _masterCardCollection.CardQuantities[premiumCard] = 0;
+                        //Get the card list for this group from the coresponding resource file.
+                        string resourceName = $"{set}_{rarity}";
+                        var cardList = Resources.ResourceManager.GetString(resourceName);
+                        var lines = cardList.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+
+                        // Parse the lines into our data structure.
+                        foreach (string line in lines)
+                        {
+                            string cardName = ParseCardNameFromLine(line);
+                            Card card = new Card(cardName, set, rarity);
+                            _masterCardCollection.CardQuantities[card] = 0;
+                            Card premiumCard = card.GetTwin();
+                            _masterCardCollection.CardQuantities[premiumCard] = 0;
+                        }
                     }
                 }
             }
-
-            string ParseCardNameFromLine(string line)
-            {
-                int endIndex = line.IndexOf('(') - 1;
-                int startIndex = 2;
-                int length = endIndex - startIndex;
-                return line.Substring(startIndex, length);
-            }
         }
+
+        public static string ParseCardNameFromLine(string line)
+        {
+            int endIndex = line.IndexOf('(') - 1;
+            int startIndex = 2;
+            int length = endIndex - startIndex;
+            return line.Substring(startIndex, length);
+        }
+        
         public static CardCollection CreateCardCollection(int shiftStoneTotal = 0)
         {
-            if (_masterCardCollection == null)
-                InitializeMasterCollection();
             var collection = _masterCardCollection.Clone();
             collection.ShiftStoneTotal = shiftStoneTotal;
             return collection;

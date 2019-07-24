@@ -98,7 +98,6 @@ namespace EternalCalculator
         static async Task<int> Main(string[] args)
         {
             EternalCalculator calc;
-            CardCollection.InitializeMasterCollection();
             if (args.Length < 1)
             {
                 Console.WriteLine("No trial count given. Will conduct test with default trial count of 10.");
